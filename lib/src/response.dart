@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'interface.dart';
 import 'request.dart';
+import 'utils.dart';
 
 class ResponseBase extends Response {
   ResponseBase(this._request, this.response);
@@ -72,6 +73,9 @@ class ResponseBase extends Response {
     }
   }
 
+  /// if either `autoRedirect` is true, or `autoRedirect` is null and client's
+  /// `autoRedirect` field is true, then returned response will continue
+  /// redirects until a non-redirect response is sent.
   @override
   Future<Response> redirect({bool? autoRedirect}) async {
     switch (statusCode) {
@@ -89,14 +93,21 @@ class ResponseBase extends Response {
           [..._request.redirectsList ?? [], this],
           null, // headers
           null, // body
-          autoRedirect, //not used
         );
-        return redirectRequest.send();
+        return redirectRequest.send(autoRedirect: autoRedirect);
       case HttpStatus.multipleChoices:
       case HttpStatus.notModified:
         throw UnimplementedError();
       default:
         throw Exception('unable to redirect $statusCode $reasonPhrase');
     }
+  }
+
+  @override
+  String dump() {
+    final buffer = StringBuffer()
+      ..writeln('HTTP/1.1 $statusCode $reasonPhrase')
+      ..write(response.headers.dump());
+    return buffer.toString();
   }
 }

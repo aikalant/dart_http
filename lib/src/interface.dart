@@ -9,6 +9,14 @@ typedef SendHook = Future<void> Function(Request);
 typedef ReceiveHook = Future<void> Function(Response);
 typedef ShouldRedirect = Future<bool?>? Function(Response);
 
+/// Following precedence is used to determine redirect behavior:
+///
+/// Go down the list until we encounter a non-null boolean value.
+/// 1. `shouldRedirect` return
+/// 2. `autoRedirect` argument in `Client.send`, `Request.send` or
+/// `Response.redirect`
+/// 3. `autoRedirect` field in the `Request`
+/// 4. `autoRedirect` field in `Client` (always non-null, defaults true)
 @sealed
 abstract class Client {
   factory Client({
@@ -23,6 +31,7 @@ abstract class Client {
   Client.create();
 
   bool get autoRedirect;
+  String? userAgent;
 
   ShouldRedirect? get shouldRedirect;
 
@@ -37,7 +46,6 @@ abstract class Client {
     Uri url, {
     Map<String, Object>? headers,
     Object? body,
-    bool? autoRedirect,
   });
 
   Future<Response> send(
@@ -52,21 +60,24 @@ abstract class Client {
         url,
         headers: headers,
         body: body,
-        autoRedirect: null,
       ).then((request) => request.send(autoRedirect: autoRedirect));
 }
 
 abstract class Request {
   Client get client;
   Response? get reponse;
-  UnmodifiableListView<Response>? redirects;
+  UnmodifiableListView<Response> get redirects;
   String get method;
   Uri get url;
   HttpHeaders get headers;
   List<Cookie> get cookies;
   Object? body;
+  List<int>? get bodyBytes;
+  String? get bodyString;
 
   Future<Response> send({bool? autoRedirect});
+
+  String dump();
 }
 
 abstract class Response {
@@ -76,7 +87,9 @@ abstract class Response {
   int get statusCode;
   String get reasonPhrase;
   @nonVirtual
-  Uri get initialUrl => request.redirects?.first.request.url ?? request.url;
+  Uri get initialUrl => request.redirects.isNotEmpty
+      ? request.redirects.first.request.url
+      : request.url;
   HttpHeaders get headers;
   List<Cookie> get cookies;
   Future<List<int>> get bodyBytes;
@@ -84,4 +97,6 @@ abstract class Response {
 
   bool get canRedirect;
   Future<Response> redirect({bool? autoRedirect});
+
+  String dump();
 }

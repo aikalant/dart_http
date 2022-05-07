@@ -24,6 +24,11 @@ class ClientBase extends Client {
   late final List<ReceiveHook>? receiveHooks;
 
   @override
+  set userAgent(String? userAgent) => client.userAgent = userAgent;
+  @override
+  String? get userAgent => client.userAgent;
+
+  @override
   void addSendHook(SendHook sendHook) => (sendHooks ??= []).add(sendHook);
   @override
   void removeSendHook(SendHook sendHook) => sendHooks?.remove(sendHook);
@@ -49,6 +54,5 @@ class ClientBase extends Client {
         null,
         headers,
         body,
-        autoRedirect,
       );
 }
