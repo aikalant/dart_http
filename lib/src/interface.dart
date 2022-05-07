@@ -52,6 +52,8 @@ abstract class Client {
         headers: headers,
         body: body,
       ).then((request) => request.send(autoRedirect: autoRedirect));
+
+  void close({bool force = false});
 }
 
 abstract class Request {
@@ -67,6 +69,7 @@ abstract class Request {
   String? get bodyString;
 
   Future<Response> send({bool? autoRedirect});
+  void abort([Object? exception, StackTrace? stackTrace]);
 
   String dump();
 }

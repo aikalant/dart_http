@@ -89,6 +89,12 @@ class RequestBase extends Request {
     return response;
   }
 
+  @override
+  void abort([Object? exception, StackTrace? stackTrace]) {
+    _sending = _locked = true;
+    request.abort(exception, stackTrace);
+  }
+
   void _addBody(Object body) {
     final List<int> bytes;
     final ContentType? contentType;

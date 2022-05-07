@@ -55,4 +55,7 @@ class ClientBase extends Client {
         headers,
         body,
       );
+
+  @override
+  void close({bool force = false}) => client.close(force: force);
 }
