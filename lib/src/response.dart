@@ -48,7 +48,7 @@ class ResponseBase extends Response {
       buffer.addAll,
       onDone: () => completer.complete(buffer),
     );
-    return completer.future;
+    return completer.future.then((body) => _bodyBytes = body);
   }
 
   @override
