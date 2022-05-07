@@ -10,7 +10,6 @@ class ClientBase extends Client {
   ClientBase(
     this.autoRedirect,
     this.preReadBody,
-    this.shouldRedirect,
     this.sendHooks,
     this.receiveHooks,
   )   : client = HttpClient(),
@@ -21,8 +20,6 @@ class ClientBase extends Client {
   bool autoRedirect;
   @override
   bool preReadBody;
-  @override
-  ShouldRedirect? shouldRedirect;
   late final List<SendHook>? sendHooks;
   late final List<ReceiveHook>? receiveHooks;
 

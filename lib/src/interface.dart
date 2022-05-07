@@ -6,21 +6,18 @@ import 'client.dart';
 
 typedef SendHook = Future<void> Function(Request);
 typedef ReceiveHook = Future<void> Function(Response);
-typedef ShouldRedirect = Future<bool?>? Function(Response);
 
 @sealed
 abstract class Client {
   factory Client({
     bool autoRedirect = true,
     bool preReadBody = true,
-    ShouldRedirect? shouldRedirect,
     List<SendHook>? sendHooks,
     List<ReceiveHook>? receiveHooks,
   }) =>
       ClientBase(
         autoRedirect,
         preReadBody,
-        shouldRedirect,
         sendHooks,
         receiveHooks,
       );
@@ -31,8 +28,6 @@ abstract class Client {
   bool get autoRedirect;
   bool get preReadBody;
   String? userAgent;
-
-  ShouldRedirect? get shouldRedirect;
 
   void addSendHook(SendHook sendHook);
   void removeSendHook(SendHook sendHook);
