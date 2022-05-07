@@ -2,11 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:meta/meta.dart';
+
 import 'client.dart';
 import 'interface.dart';
 import 'response.dart';
 import 'utils.dart';
 
+@internal
 class RequestBase extends Request {
   RequestBase(
     this.clientBase,
@@ -98,7 +101,7 @@ class RequestBase extends Request {
         bodyString = body;
         contentType = ContentType.text;
       } else if (body is Map<String, String>) {
-        bodyString = encodeFormFields(body);
+        bodyString = _encodeFormFields(body);
         contentType = ContentType.parse('application/x-www-form-urlencoded');
       } else {
         throw Exception('Invalid body type [${body.runtimeType}]');
@@ -116,7 +119,7 @@ class RequestBase extends Request {
     if (_body is List<int>) return _body! as List<int>;
     if (_body is String) return utf8.encode(_body! as String);
     if (_body is Map<String, String>) {
-      return utf8.encode(encodeFormFields(_body! as Map<String, String>));
+      return utf8.encode(_encodeFormFields(_body! as Map<String, String>));
     }
     return null;
   }
@@ -126,10 +129,13 @@ class RequestBase extends Request {
     if (_body is List<int>) return utf8.decode(_body! as List<int>);
     if (_body is String) return _body! as String;
     if (_body is Map<String, String>) {
-      return encodeFormFields(_body! as Map<String, String>);
+      return _encodeFormFields(_body! as Map<String, String>);
     }
     return null;
   }
+
+  static String _encodeFormFields(Map<String, String> formFields) =>
+      Uri(queryParameters: formFields).query;
 
   @override
   String dump() {

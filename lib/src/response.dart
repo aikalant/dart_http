@@ -2,10 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:meta/meta.dart';
+
 import 'interface.dart';
 import 'request.dart';
 import 'utils.dart';
 
+@internal
 class ResponseBase extends Response {
   ResponseBase(this._request, this.response);
 
@@ -79,7 +82,7 @@ class ResponseBase extends Response {
           _request.clientBase,
           await _request.clientBase.client.openUrl(
             request.method,
-            Uri.parse(headers['location']!.first),
+            Uri.parse(headers.locationHeader!.first),
           ),
           [..._request.redirectsList, this],
           null, // headers

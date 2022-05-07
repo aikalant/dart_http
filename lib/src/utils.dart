@@ -3,13 +3,6 @@ import 'dart:io';
 import 'package:meta/meta.dart';
 
 @internal
-class Body {
-  const Body(this.string, this.contentType);
-  final String string;
-  final ContentType contentType;
-}
-
-@internal
 extension HttpHeadersExt on HttpHeaders {
   String dump() {
     final buffer = StringBuffer();
@@ -20,8 +13,6 @@ extension HttpHeadersExt on HttpHeaders {
     });
     return buffer.toString();
   }
-}
 
-@internal
-String encodeFormFields(Map<String, String> formFields) =>
-    Uri(queryParameters: formFields).query;
+  List<String>? get locationHeader => this['location'];
+}

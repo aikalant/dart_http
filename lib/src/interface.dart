@@ -8,14 +8,6 @@ typedef SendHook = Future<void> Function(Request);
 typedef ReceiveHook = Future<void> Function(Response);
 typedef ShouldRedirect = Future<bool?>? Function(Response);
 
-/// Following precedence is used to determine redirect behavior:
-///
-/// Go down the list until we encounter a non-null boolean value.
-/// 1. `shouldRedirect` return
-/// 2. `autoRedirect` argument in `Client.send`, `Request.send` or
-/// `Response.redirect`
-/// 3. `autoRedirect` field in the `Request`
-/// 4. `autoRedirect` field in `Client` (always non-null, defaults true)
 @sealed
 abstract class Client {
   factory Client({
