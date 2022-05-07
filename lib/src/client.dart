@@ -9,6 +9,7 @@ import 'request.dart';
 class ClientBase extends Client {
   ClientBase(
     this.autoRedirect,
+    this.preReadBody,
     this.shouldRedirect,
     this.sendHooks,
     this.receiveHooks,
@@ -18,6 +19,8 @@ class ClientBase extends Client {
   final HttpClient client;
   @override
   bool autoRedirect;
+  @override
+  bool preReadBody;
   @override
   ShouldRedirect? shouldRedirect;
   late final List<SendHook>? sendHooks;

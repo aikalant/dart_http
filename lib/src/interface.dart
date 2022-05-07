@@ -12,16 +12,24 @@ typedef ShouldRedirect = Future<bool?>? Function(Response);
 abstract class Client {
   factory Client({
     bool autoRedirect = true,
+    bool preReadBody = true,
     ShouldRedirect? shouldRedirect,
     List<SendHook>? sendHooks,
     List<ReceiveHook>? receiveHooks,
   }) =>
-      ClientBase(autoRedirect, shouldRedirect, sendHooks, receiveHooks);
+      ClientBase(
+        autoRedirect,
+        preReadBody,
+        shouldRedirect,
+        sendHooks,
+        receiveHooks,
+      );
 
   @internal
   Client.create();
 
   bool get autoRedirect;
+  bool get preReadBody;
   String? userAgent;
 
   ShouldRedirect? get shouldRedirect;

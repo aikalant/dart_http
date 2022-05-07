@@ -77,6 +77,8 @@ class RequestBase extends Request {
 
     final response = _response = ResponseBase(this, await request.close());
 
+    if (client.preReadBody) await response.readBody();
+
     if (clientBase.sendHooks != null) {
       for (final hook in [...clientBase.sendHooks!]) {
         await hook(this);
