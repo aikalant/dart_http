@@ -1,4 +1,4 @@
 library better_html;
 
 export 'src/interface.dart'
-    show Client, Request, Response, SendHook, ReceiveHook, ShouldRedirect;
+    show Client, Request, Response, SendHook, ReceiveHook;
