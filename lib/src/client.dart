@@ -51,7 +51,7 @@ class ClientBase extends Client {
       RequestBase(
         this,
         await client.openUrl(method, url),
-        null,
+        const [],
         headers,
         body,
       );

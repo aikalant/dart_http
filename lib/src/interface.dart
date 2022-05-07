@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:io';
 
 import 'package:meta/meta.dart';
@@ -66,7 +65,7 @@ abstract class Client {
 abstract class Request {
   Client get client;
   Response? get reponse;
-  UnmodifiableListView<Response> get redirects;
+  List<Response> get redirects;
   String get method;
   Uri get url;
   HttpHeaders get headers;
@@ -92,8 +91,9 @@ abstract class Response {
       : request.url;
   HttpHeaders get headers;
   List<Cookie> get cookies;
-  Future<List<int>> get bodyBytes;
-  Future<String> get bodyString;
+  Future<List<int>> readBody();
+  List<int> get body;
+  String get bodyString;
 
   bool get canRedirect;
   Future<Response> redirect({bool? autoRedirect});

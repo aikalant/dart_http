@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 
@@ -12,17 +11,17 @@ class RequestBase extends Request {
   RequestBase(
     this.clientBase,
     this.request,
-    List<ResponseBase>? redirects,
+    this.redirectsList,
     Map<String, Object>? headers,
     this._body,
-  ) : redirectsList = redirects == null ? null : List.unmodifiable(redirects) {
+  ) {
     headers?.forEach((name, value) => request.headers.add(name, value));
     request.followRedirects = false;
   }
 
   final ClientBase clientBase;
   final HttpClientRequest request;
-  final List<ResponseBase>? redirectsList;
+  final List<ResponseBase> redirectsList;
   Object? _body;
   ResponseBase? _response;
   bool _sending = false;
@@ -32,8 +31,7 @@ class RequestBase extends Request {
   Client get client => clientBase;
 
   @override
-  UnmodifiableListView<Response> get redirects =>
-      UnmodifiableListView(redirectsList?.cast() ?? []);
+  List<Response> get redirects => List.unmodifiable(redirectsList);
 
   @override
   String get method => request.method;

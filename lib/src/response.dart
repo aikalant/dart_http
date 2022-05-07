@@ -30,30 +30,21 @@ class ResponseBase extends Response {
   List<Cookie> get cookies => response.cookies;
 
   @override
-  Future<List<int>> get bodyBytes async => _bodyBytes ??=
-      _bodyString != null ? utf8.encode(_bodyString!) : await _readBodyBytes();
+  List<int> get body => _bodyBytes ??=
+      throw Exception('Body has not been read yet. Call "readBody" first.');
 
   @override
-  Future<String> get bodyString async => _bodyString ??=
-      _bodyBytes != null ? utf8.decode(_bodyBytes!) : await _readBodyString();
+  String get bodyString => _bodyString ??= utf8.decode(body);
 
-  Future<List<int>> _readBodyBytes() {
+  @override
+  Future<List<int>> readBody() {
+    if (_bodyBytes != null) return Future.value(_bodyBytes);
     final completer = Completer<List<int>>();
     final buffer = <int>[];
     response.listen(
       buffer.addAll,
       onDone: () => completer.complete(buffer),
     );
-    return completer.future;
-  }
-
-  Future<String> _readBodyString() {
-    final completer = Completer<String>();
-    final buffer = StringBuffer();
-    response.transform(utf8.decoder).listen(
-          buffer.write,
-          onDone: () => completer.complete(buffer.toString()),
-        );
     return completer.future;
   }
 
@@ -90,7 +81,7 @@ class ResponseBase extends Response {
             request.method,
             Uri.parse(headers['location']!.first),
           ),
-          [..._request.redirectsList ?? [], this],
+          [..._request.redirectsList, this],
           null, // headers
           null, // body
         );
