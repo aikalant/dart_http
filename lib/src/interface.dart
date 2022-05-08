@@ -56,6 +56,7 @@ abstract class Client {
         url,
         headers: headers,
         body: body,
+        tag: tag,
       ).then((request) => request.send(autoRedirect: autoRedirect));
 
   void close({bool force = false});

@@ -82,9 +82,9 @@ class RequestBase extends Request {
 
     if (client.preReadBody) await response.readBody();
 
-    if (clientBase.sendHooks != null) {
-      for (final hook in [...clientBase.sendHooks!]) {
-        await hook(this);
+    if (clientBase.receiveHooks != null) {
+      for (final hook in [...clientBase.receiveHooks!]) {
+        await hook(response);
       }
     }
 
@@ -155,11 +155,7 @@ class RequestBase extends Request {
         '${method.toUpperCase()} '
         '${url.path.isEmpty ? '/' : url.path}?${url.query} HTTP/1.1',
       )
-      ..writeln('Host: ${url.host}');
-    if (client.userAgent != null) {
-      buffer.writeln('User-Agent: ${client.userAgent}');
-    }
-    buffer.write(request.headers.dump());
+      ..write(request.headers.dump());
     return buffer.toString();
   }
 }

@@ -4,13 +4,19 @@ import 'package:meta/meta.dart';
 
 @internal
 extension HttpHeadersExt on HttpHeaders {
-  String dump() {
+  String dump({bool fold = false}) {
     final buffer = StringBuffer();
+    final output = <MapEntry<String, String>>[];
     forEach((name, values) {
-      buffer
-        ..write('$name: ')
-        ..writeln(values.join(', '));
+      if (fold) {
+        values.forEach((value) => output.add(MapEntry(name, value)));
+      } else {
+        output.add(MapEntry(name, values.join(', ')));
+      }
     });
+    output
+      ..sort(((a, b) => a.key.compareTo(b.key)))
+      ..forEach((entry) => buffer.writeln('${entry.key}: ${entry.value}'));
     return buffer.toString();
   }
 

@@ -20,8 +20,8 @@ class ClientBase extends Client {
   bool autoRedirect;
   @override
   bool preReadBody;
-  late final List<SendHook>? sendHooks;
-  late final List<ReceiveHook>? receiveHooks;
+  List<SendHook>? sendHooks;
+  List<ReceiveHook>? receiveHooks;
 
   @override
   set userAgent(String? userAgent) => client.userAgent = userAgent;
