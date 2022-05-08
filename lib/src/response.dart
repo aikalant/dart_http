@@ -87,6 +87,7 @@ class ResponseBase extends Response {
           [..._request.redirectsList, this],
           null, // headers
           null, // body
+          _request.tag,
         );
         return redirectRequest.send(autoRedirect: autoRedirect);
       case HttpStatus.multipleChoices:

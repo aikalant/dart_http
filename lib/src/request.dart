@@ -17,6 +17,7 @@ class RequestBase extends Request {
     this.redirectsList,
     Map<String, Object>? headers,
     this._body,
+    this.tag,
   ) {
     headers?.forEach((name, value) => request.headers.add(name, value));
     request.followRedirects = false;
@@ -25,6 +26,8 @@ class RequestBase extends Request {
   final ClientBase clientBase;
   final HttpClientRequest request;
   final List<ResponseBase> redirectsList;
+  @override
+  dynamic tag;
   Object? _body;
   ResponseBase? _response;
   bool _sending = false;

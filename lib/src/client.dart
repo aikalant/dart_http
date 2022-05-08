@@ -47,6 +47,7 @@ class ClientBase extends Client {
     Map<String, Object>? headers,
     Object? body,
     bool? autoRedirect,
+    dynamic tag,
   }) async =>
       RequestBase(
         this,
@@ -54,6 +55,7 @@ class ClientBase extends Client {
         const [],
         headers,
         body,
+        tag,
       );
 
   @override

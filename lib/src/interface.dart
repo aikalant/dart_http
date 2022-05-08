@@ -40,6 +40,7 @@ abstract class Client {
     Uri url, {
     Map<String, Object>? headers,
     Object? body,
+    dynamic tag,
   });
 
   Future<Response> send(
@@ -48,6 +49,7 @@ abstract class Client {
     Map<String, Object>? headers,
     Object? body,
     bool? autoRedirect,
+    dynamic tag,
   }) =>
       open(
         method,
@@ -70,6 +72,7 @@ abstract class Request {
   Object? body;
   List<int>? get bodyBytes;
   String? get bodyString;
+  dynamic get tag;
 
   Future<Response> send({bool? autoRedirect});
   void abort([Object? exception, StackTrace? stackTrace]);
