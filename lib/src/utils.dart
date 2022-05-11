@@ -19,6 +19,4 @@ extension HttpHeadersExt on HttpHeaders {
       ..forEach((entry) => buffer.writeln('${entry.key}: ${entry.value}'));
     return buffer.toString();
   }
-
-  List<String>? get locationHeader => this['location'];
 }

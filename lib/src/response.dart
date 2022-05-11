@@ -82,7 +82,7 @@ class ResponseBase extends Response {
           _request.clientBase,
           await _request.clientBase.client.openUrl(
             request.method,
-            request.url.resolve(headers.locationHeader!.first),
+            request.url.resolve(headers[HttpHeaders.locationHeader]!.first),
           ),
           [..._request.redirectsList, this],
           null, // headers
