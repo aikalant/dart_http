@@ -1,11 +1,12 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:meta/meta.dart';
 
 import 'client.dart';
 
-typedef SendHook = Future<void> Function(Request);
-typedef ReceiveHook = Future<void> Function(Response);
+typedef SendHook = FutureOr<void> Function(Request);
+typedef ReceiveHook = FutureOr<void> Function(Response);
 
 @sealed
 abstract class Client {
@@ -26,8 +27,13 @@ abstract class Client {
   Client.create();
 
   bool get autoRedirect;
+  set autoRedirect(bool autoRedirect);
+
   bool get preReadBody;
-  String? userAgent;
+  set preReadBody(bool preReadBody);
+
+  String? get userAgent;
+  set userAgent(String? userAgent);
 
   void addSendHook(SendHook sendHook);
   void removeSendHook(SendHook sendHook);
