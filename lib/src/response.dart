@@ -74,10 +74,25 @@ class ResponseBase extends Response {
   Future<Response> redirect({bool? autoRedirect}) async {
     switch (statusCode) {
       case HttpStatus.movedPermanently:
-      case HttpStatus.permanentRedirect:
       case HttpStatus.found:
       case HttpStatus.seeOther:
+        final redirectRequest = RequestBase(
+          _request.clientBase,
+          await _request.clientBase.client.openUrl(
+            'GET',
+            request.url.resolve(headers[HttpHeaders.locationHeader]!.first),
+          ),
+          [..._request.redirectsList, this],
+          null,
+          null,
+          _request.tag,
+        );
+        return redirectRequest.send(autoRedirect: autoRedirect);
+      case HttpStatus.permanentRedirect:
       case HttpStatus.temporaryRedirect:
+        final extractedHeaders = <String, List<String>>{};
+        _request.headers
+            .forEach((name, values) => extractedHeaders[name] = values);
         final redirectRequest = RequestBase(
           _request.clientBase,
           await _request.clientBase.client.openUrl(
@@ -85,8 +100,8 @@ class ResponseBase extends Response {
             request.url.resolve(headers[HttpHeaders.locationHeader]!.first),
           ),
           [..._request.redirectsList, this],
-          null, // headers
-          null, // body
+          extractedHeaders,
+          _request.body,
           _request.tag,
         );
         return redirectRequest.send(autoRedirect: autoRedirect);
